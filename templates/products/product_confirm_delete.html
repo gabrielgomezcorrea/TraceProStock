@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="card shadow-sm mx-auto" style="max-width: 680px;">
+    <div class="card-body">
+        <h1 class="h3 mb-3">Eliminar producto</h1>
+        <p>¿Seguro que deseas eliminar <strong>{{ product.name }}</strong> del catalogo?</p>
+        <form method="post" class="d-flex flex-column flex-sm-row justify-content-end gap-2">
+            {% csrf_token %}
+            <a class="btn btn-outline-secondary" href="{{ product.get_absolute_url }}">Cancelar</a>
+            <button class="btn btn-danger" type="submit">Eliminar</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
