@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Ingreso - TraceProStock{% endblock %}
+
+{% block body %}
+<main class="login-page">
+    <section class="login-card">
+        <div class="brand-name mb-2">TraceProStock</div>
+        <p class="muted mb-4">Acceso al sistema de inventario.</p>
+
+        {% if error %}
+            <div class="alert alert-danger py-2">{{ error }}</div>
+        {% endif %}
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label" for="username">Correo</label>
+                <input class="form-control" id="username" name="username" type="text" autocomplete="username" autofocus>
+            </div>
+            <div class="mb-4">
+                <label class="form-label" for="password">Clave</label>
+                <input class="form-control" id="password" name="password" type="password" autocomplete="current-password">
+            </div>
+            <button class="btn btn-primary w-100" type="submit">Iniciar sesion</button>
+        </form>
+    </section>
+</main>
+{% endblock %}

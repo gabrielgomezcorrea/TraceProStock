@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - TraceProStock{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="summary-grid">
+    <article class="summary-card">
+        <span>Total productos</span>
+        <strong>{{ stats.total_products }}</strong>
+    </article>
+    <article class="summary-card">
+        <span>Stock bajo</span>
+        <strong>{{ stats.low_stock }}</strong>
+    </article>
+    <article class="summary-card">
+        <span>Sin stock</span>
+        <strong>{{ stats.out_of_stock }}</strong>
+    </article>
+    <article class="summary-card">
+        <span>Unidades registradas</span>
+        <strong>{{ stats.total_stock }}</strong>
+    </article>
+</div>
+
+<div class="detail-grid">
+    <section class="panel-card">
+        <div class="toolbar">
+            <h2 class="panel-title">Productos recientes</h2>
+            <a class="btn btn-primary btn-sm" href="{% url 'products:create' %}">Nuevo producto</a>
+        </div>
+        {% if latest_products %}
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>SKU</th>
+                            <th>Producto</th>
+                            <th>Categoria</th>
+                            <th class="text-end">Stock</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in latest_products %}
+                            <tr>
+                                <td>{{ product.sku }}</td>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.category }}</td>
+                                <td class="text-end">{{ product.quantity }}</td>
+                                <td>
+                                    {% if product.quantity == 0 %}
+                                        <span class="status-badge status-danger">Sin stock</span>
+                                    {% elif product.requires_restock %}
+                                        <span class="status-badge status-warn">Stock bajo</span>
+                                    {% elif product.active %}
+                                        <span class="status-badge status-ok">Disponible</span>
+                                    {% else %}
+                                        <span class="status-badge bg-secondary-subtle text-secondary">Inactivo</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="muted mb-0">No hay productos registrados.</p>
+        {% endif %}
+    </section>
+
+    <section class="panel-card">
+        <h2 class="panel-title">Alertas principales</h2>
+        {% if products_to_review %}
+            <div class="vstack gap-3">
+                {% for product in products_to_review %}
+                    <div class="d-flex justify-content-between gap-3 border-bottom pb-3">
+                        <div>
+                            <strong>{{ product.name }}</strong>
+                            <div class="muted small">Actual: {{ product.quantity }} · Minimo: {{ product.minimum_stock }}</div>
+                        </div>
+                        {% if product.quantity == 0 %}
+                            <span class="status-badge status-danger">Sin stock</span>
+                        {% else %}
+                            <span class="status-badge status-warn">Stock bajo</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="muted mb-0">No existen productos bajo minimo.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

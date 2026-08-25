@@ -1,4 +1,4 @@
-# TraceProStock CRUD Semana 6 - GABRIEL GOMEZ CORREA
+# TraceProStock CRUD Semana 9 - GABRIEL GOMEZ CORREA
 
 **TALL DE DESARROLLO WEB Y MÓVIL**  
 TALLER
@@ -10,6 +10,16 @@ TALLER
 **Sección:** 550
 
 CRUD web en Django para gestionar productos de inventario.
+
+## Accesos de prueba
+
+Administrador:
+- Usuario: admin
+- Clave: admin
+
+Operario:
+- Usuario: operario
+- Clave: operario
 
 ## Clonar repositorio y ejecutar
 

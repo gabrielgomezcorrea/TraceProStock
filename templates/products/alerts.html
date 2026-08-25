@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Alertas - TraceProStock{% endblock %}
+{% block page_title %}Alertas{% endblock %}
+
+{% block content %}
+<section class="panel-card">
+    <h2 class="panel-title">Productos bajo minimo</h2>
+    {% if products %}
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>SKU</th>
+                        <th>Producto</th>
+                        <th>Categoria</th>
+                        <th class="text-end">Stock</th>
+                        <th class="text-end">Minimo</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                        <tr>
+                            <td>{{ product.sku }}</td>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.category }}</td>
+                            <td class="text-end">{{ product.quantity }}</td>
+                            <td class="text-end">{{ product.minimum_stock }}</td>
+                            <td>
+                                {% if product.quantity == 0 %}
+                                    <span class="status-badge status-danger">Sin stock</span>
+                                {% else %}
+                                    <span class="status-badge status-warn">Stock bajo</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="muted mb-0">No existen productos bajo minimo.</p>
+    {% endif %}
+</section>
+{% endblock %}

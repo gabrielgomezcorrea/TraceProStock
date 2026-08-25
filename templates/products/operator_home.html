@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio operario - TraceProStock{% endblock %}
+{% block page_title %}Inicio operario{% endblock %}
+
+{% block content %}
+<div class="summary-grid">
+    <article class="summary-card">
+        <span>Productos</span>
+        <strong>{{ stats.total_products }}</strong>
+    </article>
+    <article class="summary-card">
+        <span>Stock bajo</span>
+        <strong>{{ stats.low_stock }}</strong>
+    </article>
+    <article class="summary-card">
+        <span>Sin stock</span>
+        <strong>{{ stats.out_of_stock }}</strong>
+    </article>
+    <article class="summary-card">
+        <span>Unidades</span>
+        <strong>{{ stats.total_stock }}</strong>
+    </article>
+</div>
+
+<div class="detail-grid">
+    <section class="panel-card">
+        <div class="toolbar">
+            <div>
+                <h2 class="panel-title">Productos</h2>
+                <p class="muted mb-0">Consulta rápida de stock.</p>
+            </div>
+            <a class="btn btn-primary btn-sm" href="{% url 'products:operator_movement' %}">Registrar movimiento</a>
+        </div>
+        <div class="vstack gap-3">
+            {% for product in products %}
+                <a class="d-flex justify-content-between align-items-center gap-3 border-bottom pb-3 text-body" href="{% url 'products:operator_products' %}">
+                    <div>
+                        <strong>{{ product.name }}</strong>
+                        <div class="muted small">{{ product.sku }} · {{ product.category }}</div>
+                    </div>
+                    <div class="text-end">
+                        <strong>{{ product.quantity }}</strong>
+                        <div class="muted small">unidades</div>
+                    </div>
+                </a>
+            {% empty %}
+                <p class="muted mb-0">No hay productos registrados.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="panel-card">
+        <h2 class="panel-title">Alertas</h2>
+        {% if products_to_review %}
+            <div class="vstack gap-3">
+                {% for product in products_to_review %}
+                    <div class="d-flex justify-content-between gap-3 border-bottom pb-3">
+                        <div>
+                            <strong>{{ product.name }}</strong>
+                            <div class="muted small">Actual: {{ product.quantity }} · Minimo: {{ product.minimum_stock }}</div>
+                        </div>
+                        {% if product.quantity == 0 %}
+                            <span class="status-badge status-danger">Sin stock</span>
+                        {% else %}
+                            <span class="status-badge status-warn">Stock bajo</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="muted mb-0">Sin alertas por ahora.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

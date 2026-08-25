@@ -1,23 +1,28 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-    <div>
-        <h1 class="h3 mb-0">{{ product.name }}</h1>
-    </div>
-    <div class="d-flex flex-wrap gap-2">
-        <a class="btn btn-outline-secondary" href="{% url 'products:list' %}">Volver</a>
-        <a class="btn btn-primary" href="{% url 'products:update' product.pk %}">Editar</a>
-    </div>
-</div>
+{% block title %}{{ product.name }} - TraceProStock{% endblock %}
+{% block page_title %}Detalle del producto{% endblock %}
 
-<section class="card shadow-sm">
-    <div class="card-body">
+{% block content %}
+<div class="detail-grid">
+    <section class="panel-card">
+        <div class="toolbar">
+            <div>
+                <h2 class="panel-title">{{ product.name }}</h2>
+                <p class="muted mb-0">{{ product.sku }} · {{ product.category }}</p>
+            </div>
+            {% if product.quantity == 0 %}
+                <span class="status-badge status-danger">Sin stock</span>
+            {% elif product.requires_restock %}
+                <span class="status-badge status-warn">Stock bajo</span>
+            {% elif product.active %}
+                <span class="status-badge status-ok">Disponible</span>
+            {% else %}
+                <span class="status-badge bg-secondary-subtle text-secondary">Inactivo</span>
+            {% endif %}
+        </div>
+
         <dl class="row mb-0">
-            <dt class="col-sm-4">SKU</dt>
-            <dd class="col-sm-8">{{ product.sku }}</dd>
-            <dt class="col-sm-4">Categoria</dt>
-            <dd class="col-sm-8">{{ product.category }}</dd>
             <dt class="col-sm-4">Descripcion</dt>
             <dd class="col-sm-8">{{ product.description }}</dd>
             <dt class="col-sm-4">Stock actual</dt>
@@ -26,24 +31,20 @@
             <dd class="col-sm-8">{{ product.minimum_stock }}</dd>
             <dt class="col-sm-4">Precio unitario</dt>
             <dd class="col-sm-8">${{ product.unit_price }}</dd>
-            <dt class="col-sm-4">Estado</dt>
-            <dd class="col-sm-8">
-                {% if product.requires_restock %}
-                    Requiere reposicion
-                {% elif product.active %}
-                    Activo
-                {% else %}
-                    Inactivo
-                {% endif %}
-            </dd>
             <dt class="col-sm-4">Creado</dt>
             <dd class="col-sm-8">{{ product.created_at }}</dd>
             <dt class="col-sm-4">Actualizado</dt>
             <dd class="col-sm-8">{{ product.updated_at }}</dd>
         </dl>
-    </div>
-    <div class="card-footer text-end">
-        <a class="btn btn-outline-danger" href="{% url 'products:delete' product.pk %}">Eliminar</a>
-    </div>
-</section>
+    </section>
+
+    <aside class="panel-card">
+        <h2 class="panel-title">Acciones</h2>
+        <div class="d-grid gap-2">
+            <a class="btn btn-primary" href="{% url 'products:update' product.pk %}">Editar producto</a>
+            <a class="btn btn-outline-secondary" href="{% url 'products:list' %}">Volver al catalogo</a>
+            <a class="btn btn-outline-danger" href="{% url 'products:delete' product.pk %}">Eliminar producto</a>
+        </div>
+    </aside>
+</div>
 {% endblock %}

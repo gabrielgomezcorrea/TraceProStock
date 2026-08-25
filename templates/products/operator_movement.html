@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Registrar movimiento - TraceProStock{% endblock %}
+{% block page_title %}Registrar movimiento{% endblock %}
+
+{% block content %}
+<section class="panel-card mx-auto" style="max-width: 720px;">
+    <h2 class="panel-title">Entrada o salida de stock</h2>
+
+    {% if message %}
+        <div class="alert alert-{{ message_type }}">{{ message }}</div>
+    {% endif %}
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label" for="product">Producto</label>
+            <select class="form-select" id="product" name="product" required>
+                {% for product in products %}
+                    <option value="{{ product.pk }}">{{ product.sku }} - {{ product.name }} ({{ product.quantity }} unidades)</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <label class="form-label" for="movement_type">Tipo</label>
+                <select class="form-select" id="movement_type" name="movement_type" required>
+                    <option value="entrada">Entrada</option>
+                    <option value="salida">Salida</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-6">
+                <label class="form-label" for="quantity">Cantidad</label>
+                <input class="form-control" id="quantity" name="quantity" type="number" min="1" value="1" required>
+            </div>
+        </div>
+        <div class="mt-4 d-flex justify-content-end gap-2">
+            <a class="btn btn-outline-secondary" href="{% url 'products:operator_home' %}">Cancelar</a>
+            <button class="btn btn-primary" type="submit">Guardar</button>
+        </div>
+    </form>
+</section>
+{% endblock %}
